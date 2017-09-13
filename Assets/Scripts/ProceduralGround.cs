@@ -51,7 +51,13 @@ public class ProceduralGround : MonoBehaviour
     {
         float distanceFromLeftX = gonzales.transform.position.x - tileLeftX;
         float distanceFromRightX = tileRightX - gonzales.transform.position.x;
-
+        if (gonzales.transform.position.y <= -10)
+        {
+            gonzales.transform.position = new Vector3(tileLeftX, 10);  
+        }
+        {
+            
+        }
         if (distanceFromLeftX < spawnDistance)
         {
             if (leftTileCount < maxLeftTileCount)
