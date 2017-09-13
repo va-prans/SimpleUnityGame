@@ -5,14 +5,9 @@ using UnityEngine;
 public class GonzalesMovement : MonoBehaviour
 {
     public float moveSpeed;
-
-    Vector2 startPosition;
-
+    
 	// Use this for initialization
-	void Start ()
-    {
-        startPosition = transform.position;
-	}
+
 	
 	// Update is called once per frame
 	void Update ()
@@ -24,11 +19,6 @@ public class GonzalesMovement : MonoBehaviour
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetMouseButton(1))
         {
             transform.Translate(Vector2.right * moveSpeed * Time.deltaTime);
-        }
-
-        if (transform.position.y < -10)
-        {
-            transform.position = startPosition;
         }
     }
 }
