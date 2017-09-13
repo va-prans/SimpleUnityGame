@@ -5,9 +5,10 @@ using UnityEngine;
 public class ProceduralGround : MonoBehaviour
 {
     public GonzalesMovement gonzales;
+    public FireWave fireWave;
     public List<Tile> tiles = new List<Tile>();
 
-    public Tile tilepPrefab;
+    public Tile tilePrefab;
     public int initialTileCount = 10;
 
     public float spawnDistance = 10;
@@ -31,7 +32,7 @@ public class ProceduralGround : MonoBehaviour
     {
         for (int i = 0; i < initialTileCount; i++)
         {
-            Tile newTile = Instantiate(tilepPrefab);
+            Tile newTile = Instantiate(tilePrefab);
             newTile.transform.parent = transform;
         }
         for (int i = 0; i < transform.childCount; i++)
@@ -55,9 +56,7 @@ public class ProceduralGround : MonoBehaviour
         {
             gonzales.transform.position = new Vector3(tileLeftX, 10);  
         }
-        {
-            
-        }
+
         if (distanceFromLeftX < spawnDistance)
         {
             if (leftTileCount < maxLeftTileCount)
@@ -66,13 +65,16 @@ public class ProceduralGround : MonoBehaviour
             }
             else
             {
+                // Once we reach the left end
                 if (!reachedLeftEnd)
                 {
-                    gonzales.moveSpeed *= speedModifier;
                     reachedLeftEnd = true;
+                    gonzales.moveSpeed *= speedModifier;
                     reachedRightEnd = false;
                     rightTileCount = 0;
                     maxRghtTileCount--;
+
+                    fireWave.StartFireWave(false, new Vector2(tileLeftX - 12.4f, gonzales.transform.position.y), gonzales.moveSpeed);
 
                     if (maxRghtTileCount <= 0)
                     {
@@ -94,13 +96,16 @@ public class ProceduralGround : MonoBehaviour
             }
             else
             {
+                // Once we reach the right end
                 if (!reachedRightEnd)
                 {
+                    reachedRightEnd = true;
                     gonzales.moveSpeed *= speedModifier;
                     reachedLeftEnd = false;
-                    reachedRightEnd = true;
                     leftTileCount = 0;
                     maxLeftTileCount--;
+
+                    fireWave.StartFireWave(true, new Vector2(tileRightX + 1.4f, gonzales.transform.position.y), gonzales.moveSpeed);
 
                     if (maxLeftTileCount <= 0)
                     {
