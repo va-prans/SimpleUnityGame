@@ -8,6 +8,9 @@ public class FireWave : MonoBehaviour
     private ParticleSystem.MainModule psMain;
     private ParticleSystem.EmissionModule psEmission;
 
+    private BoxCollider2D collider2d;
+    private Vector2 colliderSize;
+
     bool left;
     float speed;
 
@@ -20,7 +23,12 @@ public class FireWave : MonoBehaviour
         psMain = ps.main;
         psEmission = ps.emission;
 
+        collider2d = GetComponent<BoxCollider2D>();
+        colliderSize = collider2d.size;
+
         speed = 5;
+
+        StopFireWave();
 	}
 	
 	// Update is called once per frame
@@ -59,12 +67,14 @@ public class FireWave : MonoBehaviour
 
         isActive = true;
         psEmission.enabled = true;
+        collider2d.size = colliderSize;
     }
 
     public void StopFireWave()
     {
         isActive = false;
         psEmission.enabled = false;
+        collider2d.size = Vector2.zero;
     }
 
 }

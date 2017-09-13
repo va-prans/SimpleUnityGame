@@ -11,9 +11,9 @@ public class ProceduralGround : MonoBehaviour
     public Tile tilePrefab;
     public int initialTileCount = 10;
 
-    public float spawnDistance = 10;
+    public float spawnDistance = 25;
 
-    float speedModifier = 1.02f;
+    float speedModifier = 1.05f;
 
     bool reachedLeftEnd;
     bool reachedRightEnd;
@@ -24,17 +24,33 @@ public class ProceduralGround : MonoBehaviour
     int leftTileCount;
     int rightTileCount;
 
-    int maxLeftTileCount = 0;
-    int maxRghtTileCount = 0;
+    int maxLeftTileCount = 50;
+    int maxRghtTileCount = 50;
 
-	// Use this for initialization
-	void Start ()
+    public float GetTileLeftX()
     {
-        for (int i = 0; i < initialTileCount; i++)
+        return tileLeftX;
+    }
+
+    public void ResetLevel()
+    {
+        tileLeftX = 0;
+        tileRightX = 0;
+        leftTileCount = 0;
+        rightTileCount = 0;
+        reachedLeftEnd = true;
+        reachedRightEnd = false;
+        spawnDistance = 25;
+        tiles.Clear();
+
+        int tilesMissing = initialTileCount - transform.childCount;
+
+        for (int i = 0; i < tilesMissing; i++)
         {
             Tile newTile = Instantiate(tilePrefab);
             newTile.transform.parent = transform;
         }
+
         for (int i = 0; i < transform.childCount; i++)
         {
             tiles.Add(transform.GetChild(i).GetComponent<Tile>());
@@ -45,6 +61,12 @@ public class ProceduralGround : MonoBehaviour
             tile.transform.localPosition = new Vector2(tileRightX, tile.transform.localPosition.y);
             tileRightX += tile.GetSpriteSize();
         }
+    }
+
+	// Use this for initialization
+	void Start ()
+    {
+        ResetLevel();
 	}
 	
 	// Update is called once per frame
@@ -52,10 +74,6 @@ public class ProceduralGround : MonoBehaviour
     {
         float distanceFromLeftX = gonzales.transform.position.x - tileLeftX;
         float distanceFromRightX = tileRightX - gonzales.transform.position.x;
-        if (gonzales.transform.position.y <= -10)
-        {
-            gonzales.transform.position = new Vector3(tileLeftX, 10);  
-        }
 
         if (distanceFromLeftX < spawnDistance)
         {
@@ -74,7 +92,7 @@ public class ProceduralGround : MonoBehaviour
                     rightTileCount = 0;
                     maxRghtTileCount--;
 
-                    fireWave.StartFireWave(false, new Vector2(tileLeftX - 12.4f, gonzales.transform.position.y), gonzales.moveSpeed);
+                    fireWave.StartFireWave(false, new Vector2(tileLeftX - 15f, gonzales.transform.position.y), gonzales.moveSpeed);
 
                     if (maxRghtTileCount <= 0)
                     {
@@ -105,7 +123,7 @@ public class ProceduralGround : MonoBehaviour
                     leftTileCount = 0;
                     maxLeftTileCount--;
 
-                    fireWave.StartFireWave(true, new Vector2(tileRightX + 1.4f, gonzales.transform.position.y), gonzales.moveSpeed);
+                    fireWave.StartFireWave(true, new Vector2(tileRightX + 15f, gonzales.transform.position.y), gonzales.moveSpeed);
 
                     if (maxLeftTileCount <= 0)
                     {
